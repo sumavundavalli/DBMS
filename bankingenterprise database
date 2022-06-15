@@ -1,0 +1,88 @@
+create database bankingenterprise;
+use bankingenterprise;
+
+create table branch
+(branch_name varchar(20),
+branch_city varchar(10),
+assets real,
+primary key(branch_name));
+
+desc branch;
+
+create table accounts
+(accno int,
+branch_name varchar(20),
+balance real,
+primary key(accno),
+foreign key(branch_name) references branch(branch_name) on delete cascade);
+
+
+desc accounts;
+
+create table depositer
+(customer_name varchar(15),
+customer_street varchar(20),
+customer_city varchar(10),
+primary key(customer_name));
+
+desc depositer;
+
+create table loan
+(loan_no int,
+branch_name varchar(20),
+amount real,
+primary key(loan_no),
+foreign key(branch_name) references branch(branch_name) on delete cascade);
+
+
+desc loan;
+
+
+create table borrower
+(customer_name varchar(15),
+loan_no int,
+primary key(customer_name,loan_no),
+foreign key(customer_name) references depositer(customer_name),
+foreign key(loan_no) references loan(loan_no));
+
+desc borrower;
+
+insert into branch values( 'HDFC', 'BANGALORE', 10000);
+insert into branch values( 'IFSC', 'BALLARI', 20000);
+insert into branch values( 'IND', 'MANGLORE', 15000);
+insert into branch values( 'AXIS', 'BIDAR', 10500);
+insert into branch values( 'CND', 'BELGAUM', 25400);
+
+select * from branch;
+
+insert into accounts values( 01 , 'HDFC', 20000);
+insert into accounts values( 02 , 'HDFC', 25500);
+insert into accounts values( 03 , 'IFSC', 38500);
+insert into accounts values( 04 , 'CND', 44500);
+insert into accounts values( 05 , 'HDFC', 52100);
+
+select * from accounts;
+
+insert into depositer values('abc' , 'street1' , 'bangalore');
+insert into depositer values('rfc' , 'street10' , 'ballary');
+insert into depositer values('erc' , 'street5' , 'mysore');
+insert into depositer values('jhc' , 'street44' , 'bidar');
+insert into depositer values('loc' , 'street34' , 'kolar');
+
+select * from depositer;
+
+insert into loan values( 22 , 'HDFC' , 12000 );
+insert into loan values( 24 , 'IFSC' , 28000 );
+insert into loan values( 33 , 'CND' , 34000);
+insert into loan values( 35 , 'CND' , 80000 );
+insert into loan values( 44 , 'HDFC' , 23000 );
+
+select * from loan;
+
+insert into borrower values( 'abc' , 22 );
+insert into borrower values( 'rfc' , 22 );
+insert into borrower values( 'abc' , 44 );
+insert into borrower values( 'jhc' , 35 );
+insert into borrower values( 'loc' , 44 );
+
+select * from borrower;
