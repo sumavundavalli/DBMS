@@ -1,0 +1,65 @@
+create database supplier;
+
+use supplier;
+
+show tables;
+
+create table suppliers
+( s_id int,
+s_name varchar(20),
+s_adrress varchar(25),
+primary key(s_id));
+
+desc suppliers;
+
+create table parts 
+(p_id int,
+p_name varchar(15),
+color varchar(10),
+primary key(p_id));
+
+desc parts;
+
+
+create table catalog
+(s_id int,
+p_id int,
+cost real,
+primary key(s_id , p_id),
+foreign key (s_id) references suppliers(s_id) on delete cascade,
+foreign key(p_id) references parts(p_id) on delete cascade);
+
+desc catalog;
+
+insert into suppliers values( '001' , 'abc' , 'bangalore');
+insert into suppliers values( '002' , 'abc' , 'mysore');
+insert into suppliers values( '003' , 'avh' , 'jaipur');
+insert into suppliers values( '007' , 'nhg' , 'udaipur');
+insert into suppliers values( '006' , 'vjg' , 'ballari');
+insert into suppliers values( '005' , 'dfg' , 'belgam');
+
+select * from  suppliers;
+
+
+insert into parts values( '084' , 'part1' , 'red');
+insert into parts values( '085' , 'part2' , 'blue');
+insert into parts values( '088' , 'part1' , 'red');
+insert into parts values( '087' , 'part3' , 'green');
+insert into parts values( '086' , 'part5' , 'black');
+insert into parts values( '080' , 'part4' , 'grey');
+
+select * from parts;
+
+insert into catalog values( '006' , '080' , 4000);
+insert into catalog values( '001' , '084' , 10000);
+insert into catalog values( '001' , '085' , 9000);
+insert into catalog values( '002' , '087' , 8400);
+insert into catalog values( '006' , '088' , 9800);
+insert into catalog values( '005' , '086' , 7200);
+insert into catalog values( '005' , '080' , 5500);
+insert into catalog values( '007' , '085' , 6700);
+
+select * from catalog;
+
+
+
