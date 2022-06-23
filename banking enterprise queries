@@ -1,0 +1,152 @@
+create database sumabankingenterprise;
+use sumabankingenterprise;
+
+create table branch
+( branch_name varchar(20),
+branch_city varchar(20),
+assets int,
+primary key(branch_name));
+
+desc branch;
+
+create table accounts
+( acc_no int,
+branch_name varchar(20),
+balance int,
+primary key(acc_no),
+foreign key(branch_name) references branch(branch_name) on delete cascade);
+
+desc accounts;
+
+create table depositer
+(customer_name varchar(15),
+customer_street varchar(50),
+customer_city varchar(20),
+primary key(customer_name));
+
+desc depositer;
+
+
+create table loan
+(loan_no int,
+branch_name varchar(20),
+amount int,
+primary key(loan_no),
+foreign key(branch_name) references branch(branch_name) on delete cascade);
+
+desc loan;
+
+create table borrrower
+(customer_name varchar(15),
+loan_no int,
+primary key(customer_name,loan_no),
+foreign key(customer_name) references depositer(customer_name) on delete cascade,
+foreign key(loan_no) references loan(loan_no) on delete cascade);
+ 
+desc borrrower;
+
+create table customeraccount
+( acc_no int,
+customer_name varchar(15),
+primary key(acc_no, customer_name),
+foreign key(acc_no) references accounts (acc_no) on delete cascade,
+foreign key(customer_name) references depositer(customer_name) on delete cascade);
+
+
+
+insert into branch values ('branch1' , 'bangalore' , 5490);
+insert into branch values ('branch2' , 'bellary' , 5480);
+insert into branch values ('branch3' , 'mangalore' , 5460);
+insert into branch values ('branch4' , 'kolar' , 5497);
+insert into branch values ('branch9' , 'jaynagar' , 5489);
+insert into branch values ('branch9' , 'bangalore' , 5490);
+
+
+select * from branch;
+
+
+insert into accounts values( 09 , 'branch9', 20000);
+insert into accounts values( 02 , 'branch2', 25500);
+insert into accounts values( 03 , 'branch3', 38500);
+insert into accounts values( 04 , 'branch2', 44500);
+insert into accounts values( 05 , 'branch2', 52100);
+insert into accounts values( 07 , 'branch6', 52100);
+
+
+select * from accounts;
+
+insert into depositer values('abd' , 'street1' , 'bangalore');
+insert into depositer values('rfc' , 'street10' , 'ballary');
+insert into depositer values('erc' , 'street5' , 'mysore');
+insert into depositer values('jhc' , 'street44' , 'bidar');
+insert into depositer values('loc' , 'street34' , 'kolar');
+
+select * from depositer;
+
+insert into loan values( 2 , 'branch1' , 12000 );
+insert into loan values( 24 , 'branch1' , 28000 );
+insert into loan values( 33 , 'branch2' , 34000);
+insert into loan values( 35 , 'branch4' , 80000 );
+insert into loan values( 44 , 'branch5' , 23000 );
+
+select * from loan;
+
+insert into borrrower values( 'abc' , 22 );
+insert into borrrower values( 'rfc' , 22 );
+insert into borrrower values( 'abc' , 44 );
+insert into borrrower values( 'jhc' , 35 );
+insert into borrrower values( 'loc' , 44 );
+
+select * from borrrower;
+
+insert into customeraccount values (08, 'abd');
+insert into customeraccount values (09, 'abd');
+insert into customeraccount values (02, 'abc');
+insert into customeraccount values (04, 'abc');
+insert into customeraccount values (02, 'loc');
+insert into customeraccount values (03, 'abc');
+insert into customeraccount values (01, 'loc');
+insert into customeraccount values (07, 'abc');
+
+
+
+
+select * from customeraccount;
+
+
+select ca.customer_name from customeraccount ca, accounts a 
+where a.acc_no = ca.acc_no 
+and a.branch_name = 'branch2'
+group by ca.customer_name 
+having count(*) >= 2;
+
+
+select ca.customer_name
+from customeraccount ca, accounts a, branch b 
+where ca.acc_no=a.acc_no and a.branch_name = b.branch_name and b.branch_city = 'bangalore';
+
+select ca.customer_name
+from  accounts a, branch b 
+where ca.acc_no=a.acc_no and a.branch_name = b.branch_name and b.branch_city = 'bangalore';
+
+
+select * from accounts;
+ select ca.customer_name
+  from customeraccount ca
+  ,accounts a
+ where ca.acc_no = a.acc_no and a.branch_name = 'branch1' and a.branch_name = 'branch6';
+ select customer_name
+ from customeraccount
+ where acc_no = ALL(
+select acc_no
+from accounts
+where branch_name in  (
+ select branch_name 
+ from branch
+ where branch_city='jaynagar')
+ );
+ 
+ 
+ ALL
+
+
