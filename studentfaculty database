@@ -1,0 +1,103 @@
+create database studentfaculty;
+
+use studentfaculty;
+
+create table student
+( snum int,
+sname varchar(20),
+major varchar(10),
+level varchar(10),
+age int,
+primary key(snum));
+
+desc student;
+
+create table class
+(name varchar(10),
+meetsat char(10),
+room varchar(10),
+fid int,
+foreign key(fid) references faculty(fid) on delete cascade);
+
+
+
+desc class;
+
+
+create table enrolled
+( snum int,
+name varchar(10),
+foreign key (snum) references student(snum) on delete cascade);
+
+
+desc enrolled;
+
+
+create table faculty 
+( fid int,
+fname varchar(20),
+deptid int,
+primary key(fid));
+
+desc faculty;
+
+
+insert into student values(1,'jhon','CS','Sr',19);
+insert into student values(2,'smith','CS','Jr',20);
+insert into student values(3,'jacob','CV','Sr',20); 
+insert into student values(4,'tom','CS','Jr',20);
+insert into student values(5,'sid','CS','Jr',20); 
+insert into student values(6,'harry','CS','Sr',21);
+
+select * from student;
+
+
+insert into faculty values(11,'Harshith',1000);
+insert into faculty values(12,'Mohan',1000);
+insert into faculty values(13,'Kumar',1001); 
+insert into faculty values(14,'Shobha',1002); 
+insert into faculty values(15,'Shan',1000);
+
+select * from faculty;
+
+insert into class values('class1','12:00:00','room1',14);
+insert into class values('class10','05:00:00','room128',14);
+insert into class values('class2','08:00:00','room2',12);
+insert into class values('class3','07:00:00','room3',11); 
+insert into class values('class4','18:00:00','room4',14); 
+insert into class values('class5','20:00:00','room3',15); 
+insert into class values('class6','08:00:00','room2',14); 
+insert into class values('class7','19:00:00','room3',14);
+
+select * from class;
+
+
+insert into enrolled values (1,'class1');
+insert into enrolled values(2,'class1'); 
+insert into enrolled values(3,'class3'); 
+insert into enrolled values(4,'class3'); 
+insert into enrolled values(3,'class3'); 
+insert into enrolled values(5,'class4');
+insert into enrolled values(1,'class5'); 
+insert into enrolled values(2,'class5'); 
+insert into enrolled values(3,'class5'); 
+insert into enrolled values(4,'class5'); 
+insert into enrolled values(5,'class5'); 
+insert into enrolled values(6,'class5');
+
+select * from enrolled;
+
+
+/* queries */
+
+select distinct s.sname from student s , class c, faculty f, enrolled e 
+where c.fid = f.fid and 
+f.fname = 'Harshith' and
+s.level = 'Jr'and
+s.snum = e.snum and 
+e.name = c.name;
+
+
+select distinct name from class where room = 'room128' or name IN (SELECT e.name FROM enrolled e GROUP BY e.name HAVING COUNT(*)>=5);
+
+
